@@ -5,6 +5,9 @@
  */
 package dal;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import modeles.*;
 
 /**
@@ -12,13 +15,52 @@ import modeles.*;
  * @author Fabien
  */
 public class UserDao {
-    public User loguer(String login, String pwd){
-        User user = null; 
-        if((login.equals("admin@chezmoi.fr")) && (pwd.equals("mdp"))){
-            user = new User(); 
-            user.setIdUser(1);
-            user.setName("Administrateur");
+
+    public User loguer(String login, String pwd) throws Exception {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        User user = null;
+        try {
+            DbOutils dbOutils = new DbOutils();
+            connection = dbOutils.connecter();
+            ps = connection.prepareStatement("select * from user where login = ?");
+            ps.setString(1, login);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                if (pwd.equalsIgnoreCase(rs.getString("pwd"))) {
+                    user = new User();
+                    setProperties(user, rs);
+                }
+            }
+            return user;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return user; 
+    }
+
+    private void setProperties(User user, ResultSet rs) throws Exception {
+        try {
+            user.setIdUser(rs.getInt("id_user"));
+            user.setName(rs.getString("name"));
+            user.setLogin(rs.getString("login"));
+            user.setPwd(rs.getString("pwd"));
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

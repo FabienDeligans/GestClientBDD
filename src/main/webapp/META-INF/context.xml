@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/GestClient"/>
+<Context antiJARLocking="true" path="/GestClients">
+    <Resource name="jdbc/GestClient"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="100"
+              maxIdle="30"
+              maxWait="10000"
+              username="gestclient"
+              password="secret"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost/gestclient"/>
+</Context>

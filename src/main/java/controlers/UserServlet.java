@@ -7,7 +7,6 @@ package controlers;
 
 import dal.UserDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -99,7 +98,7 @@ public class UserServlet extends HttpServlet {
                 vueReponse = "/accueil.jsp";
                 HttpSession session = request.getSession(true);
                 session.setAttribute("userId", user.getIdUser());
-                request.setAttribute("userR", user);;
+                request.setAttribute("userR", user);
             } else {
                 erreur = "Login mdp inconnus !";
             }
